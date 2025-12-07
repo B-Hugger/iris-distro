@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5...3.27)
 project(iris_distro)
 
 include(ExternalProject)
@@ -42,8 +42,7 @@ set(IRIS_DEPENDENCIES)
 if(IRIS_WITH_EIGEN)
   ExternalProject_Add(eigen3
     DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/eigen3-download"
-    URL https://bitbucket.org/eigen/eigen/get/3.3.3.tar.gz
-    URL_HASH SHA256=94878cbfa27b0d0fbc64c00d4aafa137f678d5315ae62ba4aecddbd4269ae75f
+    URL https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz
     TLS_VERIFY 1
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/eigen3-src"
     CMAKE_ARGS
@@ -119,7 +118,7 @@ if(IRIS_WITH_PYBIND11)
   ExternalProject_Add(pybind11
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/pybind11-src"
     GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG 7830e8509f2adc97ce9ee32bf99cd4b82089cc4c
+    GIT_TAG v2.11.1
     CMAKE_ARGS
       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
       "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMAKE_CXX_COMPILER_LAUNCHER}"

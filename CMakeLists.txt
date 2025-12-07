@@ -112,6 +112,13 @@ if(IRIS_WITH_MOSEK)
       -DWITH_MATLAB=${IRIS_WITH_MATLAB}
     BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/mosek-build")
   list(APPEND IRIS_DEPENDENCIES mosek)
+else()
+  # Use system Mosek - copy our MosekConfig.cmake to install prefix
+  file(MAKE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib/cmake/Mosek")
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/MosekConfig.cmake"
+    "${CMAKE_INSTALL_PREFIX}/lib/cmake/Mosek/MosekConfig.cmake"
+    COPYONLY)
 endif()
 
 if(IRIS_WITH_PYBIND11)

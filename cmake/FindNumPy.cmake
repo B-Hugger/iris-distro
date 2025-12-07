@@ -39,13 +39,34 @@
 #============================================================================
 
 # Finding NumPy involves calling the Python interpreter
-if(NumPy_FIND_REQUIRED)
-    find_package(PythonInterp REQUIRED)
+# Use modern CMake Python finding (3.12+) with fallback to legacy
+
+# First, check if Python executable is already set
+if(NOT PYTHON_EXECUTABLE)
+    # Try modern find_package(Python) first
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
+        find_package(Python COMPONENTS Interpreter)
+        if(Python_FOUND)
+            set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+            set(PYTHONINTERP_FOUND TRUE)
+        endif()
+    endif()
+
+    # Fallback: try to find python3 or python directly
+    if(NOT PYTHON_EXECUTABLE)
+        find_program(PYTHON_EXECUTABLE NAMES python3 python)
+        if(PYTHON_EXECUTABLE)
+            set(PYTHONINTERP_FOUND TRUE)
+        endif()
+    endif()
 else()
-    find_package(PythonInterp)
+    set(PYTHONINTERP_FOUND TRUE)
 endif()
 
-if(NOT PYTHONINTERP_FOUND)
+if(NOT PYTHONINTERP_FOUND AND NOT PYTHON_EXECUTABLE)
+    if(NumPy_FIND_REQUIRED)
+        message(FATAL_ERROR "Could not find Python interpreter")
+    endif()
     set(NUMPY_FOUND FALSE)
     return()
 endif()
